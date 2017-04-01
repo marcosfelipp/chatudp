@@ -14,7 +14,7 @@ email = input()
 print('Digite sua senha')
 senha = input()
 
-#Autenticação com servidor:
+#Autenticação com servidor :
 mensagem = [1, email, senha]
 serialize = pickle.dumps(mensagem)
 sockobj.send(serialize)
