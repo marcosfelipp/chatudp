@@ -31,7 +31,7 @@ class conexaoTCP(threading.Thread):
                 print('2')
 
 
-#Criando sockets:
+#Criando sockets  :
 #add
 sockobj = socket(AF_INET, SOCK_STREAM)
 sockobj.bind((meuHost, minhaPorta))
