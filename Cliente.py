@@ -32,3 +32,6 @@ while True:
         if selecao == 2:
             print('Digite um e mail para buscar no servidor')
             n = int(input())
+            mensagem = [2, email]
+            serialize = pickle.dumps(mensagem)
+            sockobj.send(serialize)

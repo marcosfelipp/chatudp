@@ -5,6 +5,7 @@ import pickle
 meuHost = ''
 minhaPorta = 6439
 
+# Formato: [email , [ip,porta] ]
 listaCOnexoes = []
 
 class conexaoTCP(threading.Thread):
@@ -23,6 +24,10 @@ class conexaoTCP(threading.Thread):
         tipoMensagem = mensagem[0]
 
         #tratamento de mensagens recebidos:
+
+        # Tipos de mensagens:
+        # 1: Mensagem de autenticaçao
+        # 2: Mensagem de pedido de email
         if tipoMensagem == 1:
             tupla = [mensagem[1],mensagem[2]]
             listaCOnexoes.append(tupla)
