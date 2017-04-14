@@ -3,20 +3,25 @@ import threading
 import pickle
 
 meuHost = ''
-minhaPorta = 6439
+minhaPorta = 6433
 
+<<<<<<< HEAD
 # Formato: [email , [ip,porta] ]
+=======
+# Formato da lista de conexoes: ||EMAIL|IP|PORTA||
+>>>>>>> 2.0
 listaCOnexoes = []
 
 class conexaoTCP(threading.Thread):
 
-    #id: número de identificacao do cliente
+    #id: numero de identificacao do cliente --socket--
     def __init__(self,id,com,IPCliente):
         threading.Thread.__init__(self)
         self.id = id
         self.com = com
         self.IPCliente = IPCliente
         print ('conectado com o cliente', IPCliente)
+
     def run(self):
         print('starting thread')
         serializado = self.com.recv(1024)
@@ -29,15 +34,20 @@ class conexaoTCP(threading.Thread):
         # 1: Mensagem de autenticaçao
         # 2: Mensagem de pedido de email
         if tipoMensagem == 1:
-            tupla = [mensagem[1],mensagem[2]]
+            tupla = [mensagem[1],mensagem[2],mensagem[3]]
             listaCOnexoes.append(tupla)
         else :
             if tipoMensagem == 2:
-                print('2')
+                self.getCOntato(mensagem[1])
+
+    def getCOntato(self,email):
+        #buscar contato na lista de conexões
 
 
-#Criando sockets  :
-#add
+        # Formato da mensagem a enviar:
+        # ||NUM_SEQUENCIA|EMAIL|IP|PORTA||
+
+#Criando sockets:
 sockobj = socket(AF_INET, SOCK_STREAM)
 sockobj.bind((meuHost, minhaPorta))
 sockobj.listen(5)
