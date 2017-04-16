@@ -5,11 +5,10 @@ import pickle
 meuHost = ''
 minhaPorta = 6433
 
-<<<<<<< HEAD
 # Formato: [email , [ip,porta] ]
-=======
+
 # Formato da lista de conexoes: ||EMAIL|IP|PORTA||
->>>>>>> 2.0
+
 listaCOnexoes = []
 
 class conexaoTCP(threading.Thread):
@@ -41,7 +40,7 @@ class conexaoTCP(threading.Thread):
                 self.getCOntato(mensagem[1])
 
     def getCOntato(self,email):
-        #buscar contato na lista de conexões
+        # buscar contato na lista de conexoes
 
 
         # Formato da mensagem a enviar:
