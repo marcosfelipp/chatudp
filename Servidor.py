@@ -5,8 +5,6 @@ import pickle
 meuHost = ''
 minhaPorta = 6433
 
-# Formato: [email , [ip,porta] ]
-
 # Formato da lista de conexoes: ||EMAIL|IP|PORTA||
 
 listaCOnexoes = []
@@ -28,23 +26,31 @@ class conexaoTCP(threading.Thread):
         tipoMensagem = mensagem[0]
 
         #tratamento de mensagens recebidos:
-
         # Tipos de mensagens:
         # 1: Mensagem de autenticaçao
         # 2: Mensagem de pedido de email
+
         if tipoMensagem == 1:
             tupla = [mensagem[1],mensagem[2],mensagem[3]]
             listaCOnexoes.append(tupla)
         else :
             if tipoMensagem == 2:
-                self.getCOntato(mensagem[1])
+                contato=self.getCOntato(mensagem[1])
+                if contato is None:
+                    mensagem = [4]
+                    serialize = pickle.dumps(mensagem)
+                    sockobj.send(serialize)
+                else:
+                    mensagem = [3,contato[0],contato[1],contato[2]]
+                    serialize = pickle.dumps(mensagem)
+                    sockobj.send(serialize)
 
     def getCOntato(self,email):
         # buscar contato na lista de conexoes
-
-
-        # Formato da mensagem a enviar:
-        # ||NUM_SEQUENCIA|EMAIL|IP|PORTA||
+        for contato in listaCOnexoes:
+            if contato[0] == email
+                return contato
+        return None
 
 #Criando sockets:
 sockobj = socket(AF_INET, SOCK_STREAM)

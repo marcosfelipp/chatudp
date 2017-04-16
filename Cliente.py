@@ -1,11 +1,20 @@
 from socket import *
 import pickle
-
+import threading
 
 minhaListaDeContatos = []
 serverHost = 'localhost'
 serverPort = 9697
 
+#Abre uma conexão UDP e aguarda mensagens de outros usuários:
+class conexaoUDP(threading.Thread,udp):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.udp = udp
+        print('Porta UDP aberta')
+    def run(self):
+        print('Esperando mensagens UDP')
+        msg, cliente = self.udp.recvfrom(1024)
 
 # Formato do contato
 # ||EMAIL|IP|PORTA||
@@ -14,6 +23,7 @@ def buscaContato(email):
         if contato[0] == email:
             return contato
     print('contato não encontrado')
+    exit(1)
 
 
 # Handshake
@@ -28,8 +38,16 @@ senha = input()
 print('Digite um número de porta que deseja(PARA CONEXÂO UDP):')
 serverPortUDP = int(input())
 
-#Autenticaçao com servidor
-mensagem = [1, email, senha,serverPortUDP]
+# Abertura do socket UDP:
+udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+orig = (serverHost, serverPortUDP)
+udp.bind(orig)
+ThreadUDP = conexaoUDP(udp)
+ThreadUDP.start()
+
+
+# Autenticaçao com servidor
+mensagem = [1, email,serverHost,serverPortUDP]
 serialize = pickle.dumps(mensagem)
 sockobj.send(serialize)
 
@@ -45,17 +63,13 @@ while True:
         email = int(input())
         contato = buscaContato(email)
 
+
     else:
         # buscar nos contatos e mail do cliente
         # Fazer conexao UDP com cliente
         if selecao == 2:
             # Busca no servidor:
             print('Digite um e mail para buscar no servidor')
-
-            n = int(input())
-            mensagem = [2, email]
-            serialize = pickle.dumps(mensagem)
-            sockobj.send(serialize)
             contato = int(input())
             mensagem = [2,contato]
             serialize = pickle.dumps(mensagem)
@@ -75,6 +89,6 @@ while True:
             else :
                 contatoRecebido = [mensagem[1],mensagem[2],mensagem[3]]
                 minhaListaDeContatos.append(contatoRecebido)
+                #Conexao com o cliente:
 
-            #Conexao com o cliente:
 
